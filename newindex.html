@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <title>Eid Card</title>
+    <style>
+        :root {
+            --primary: #18004A;
+            --secondary: #FFAA00;
+            --accent: #23055c;
+            --light: #faf5e4;
+            --text: #333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        body {
+            background-image: url("/img/background.png");
+            background-size: cover;
+            background-position: center;
+            color: var(--secondary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .cover-p{
+            padding-top: 85%;
+        }
+
+        .card-wrapper {
+            width: 700px;
+            max-width: 50%;
+            background-color: rgb(255, 238, 200); 
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            margin: 20px 0;
+        }
+
+        .eid-font{
+            max-width: 30%;
+        }
+
+        .card-container {
+            width: 100%;
+            max-width: 420px;
+            background-color: #faf5e4;
+            margin: 0 auto;
+            position: relative;
+            perspective: 2000px;
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+            left: 0;
+            transition: all 1s;
+        }
+
+        .eid-card {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3/4;
+            background-color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 1s;
+            transform-style: preserve-3d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+        }
+        
+        .cover {
+            position: absolute;
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            transition: all 0.5s;
+            transform-origin: left;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            z-index: 3;
+            /* backface-visibility: hidden; */
+        }
+        .eid-card.force-open ~ .card-wrapper {
+            padding: 40px;
+            background-color: rgba(250, 245, 228, 0.9); /* Slightly transparent */
+        }
+
+        .cover-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--accent);
+            backface-visibility: hidden;
+            transform: rotateY(180deg);
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .cover-back::before {
+            content: "Eid Mubarak";
+            color: var(--accent);
+            font-size: 2rem;
+            font-weight: bold;
+            opacity: 0.6;
+        }
+
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background:  #522a9ee0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+            backface-visibility: hidden;
+        }
+        
+        .card-back::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:  #4421978f;
+
+        }
+        
+        .decoration.top-right {
+            top: -0.2rem;
+            right: -0.2rem;
+        }
+        
+        .decoration.bottom-left {
+            bottom: -0.2rem;
+            left: -0.2rem;
+        }
+        
+        .eid-card:hover .cover {
+            transform: rotateY(-120deg);
+        }
+        
+        .card-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 30px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 400px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .download-btn {
+            background: var(--secondary);
+            color: var(--text);
+        }
+        
+        .name-place {
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 30px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .card-back .decoration {
+            position: absolute;
+            opacity: 0.1;
+            font-size: 8rem;
+            z-index: 0;
+        }
+
+        .eid-card.force-open .cover {
+            transform: rotateY(-120deg) !important; /* For desktop */
+        }
+
+        .cursor-sparkle {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            clip-path: polygon(
+                50% 0%,
+                61% 35%,
+                98% 35%,
+                68% 57%,
+                79% 91%,
+                50% 70%,
+                21% 91%,
+                32% 57%,
+                2% 35%,
+                39% 35%
+            );
+            background-color: var(--secondary);
+            mix-blend-mode: multiply;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.3s ease;
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: rgba(199, 155, 11, 0.986);
+            pointer-events: none;
+            z-index: 9998;
+            animation: sparkle 1s ease-out forwards;
+        }
+
+        @keyframes sparkle {
+            0% {
+                transform: translate(0, 0) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(1);
+                opacity: 0;
+            }
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: var(--secondary);
+            opacity: 0.7;
+            animation: confetti-fall 5s linear infinite;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        @media (max-width: 720px) {
+            body {
+                background-image: url("img/background-mobile.png");
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .card-content, .cover {
+                padding: 20px;
+            }
+ 
+                .eid-card.force-open .cover {
+                transform: rotateX(120deg) !important; /* For mobile */
+            }
+
+            .eid-card {
+                position: relative;
+                width: 100%;
+                aspect-ratio: 4/3;
+                background-color: white;
+                border-radius: 0 0 12px 12px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                transform-style: preserve-3d;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--text);
+            }
+        
+            .cover {
+                position: absolute;
+                background-image: url("/img/land-cover1.png");
+                background-size: cover;
+                background-position: center;
+                width: 100%;
+                height: 100%;
+                border-radius: 0 0 12px 12px;
+                cursor: pointer;
+                transition: all 0.5s;
+                transform-origin: top center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding: 30px;
+                color: white;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+                z-index: 3;
+                /* backface-visibility: hidden; */
+            }
+            
+            .card-back {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background:  #522a9ee0;
+                border-radius: 0 0 12px 12px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                color: white;
+                text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+                backface-visibility: hidden;
+            }
+            
+            .card-back::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.3);
+                border-radius: 0 0 12px 12px;
+            }
+            
+            .eid-card:hover .cover {
+                transform: rotateX(120deg);
+            }
+
+            .card-back .decoration {
+                position: absolute;
+                opacity: 0.1;
+                font-size: 5rem;
+                z-index: 0;
+            }
+            .card-content {
+                position: relative;
+                z-index: 2;
+                height: 100%;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 30px;
+            }
+            .card-wrapper {
+                padding: 20px;
+            }
+            
+            .eid-card.force-open ~ .card-wrapper {
+                padding: 25px;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+
+<body>
+    <img class= "eid-font" src="img/eid-font.png" alt="Eid Mubarak">
+    <div class="cursor-sparkle" id="cursor"></div>
+    <div class="card-wrapper">
+        <div class="card-container">
+            <div class="eid-card" id="eidCard">
+                <div class="cover" id="cover">
+                    <p class="cover-p">Hover to open your card</p>
+                </div>
+                <div class="cover-back"></div>
+                <div class="card-back" id="cardBack">
+                    <div class="decoration top-right">🌙</div>
+                    <div class="decoration bottom-left">⭐</div>
+                    <div class="card-content">
+                        <div class="message" id="cardMessage"></div>
+                        <div class="signature" id="cardSignature">\n\n</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    
+    </div>    
+    <div class="controls">
+        <input type="text" id="userName" placeholder="Enter your name">
+        <button id="generateBtn">Generate Card</button>
+        <button class="download-btn" id="downloadBtn">Download</button>
+    </div>
+
+    <script>
+
+
+        const cursor = document.getElementById('cursor');
+        const body = document.body;
+        
+        // Follow mouse movement
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            // Create sparkles
+            if (Math.random() > 0.7) {
+                createSparkle(e.clientX, e.clientY);
+            }
+        });
+        
+        // Create sparkle particles
+        function createSparkle(x, y) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            
+            // Random position around cursor
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 5 + Math.random() * 15;
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance;
+            
+            sparkle.style.setProperty('--tx', tx + 'px');
+            sparkle.style.setProperty('--ty', ty + 'px');
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+            
+            // Random color variation
+            const hue = 50 + Math.random() * 10; // Gold/yellow colors
+            sparkle.style.backgroundColor = `hsl(${hue}, 100%, 50%)`;
+            
+            document.body.appendChild(sparkle);
+            
+            // Remove after animation completes
+            setTimeout(() => {
+                sparkle.remove();
+            }, 1000);
+        }
+        
+        // Make cursor interactive with click effects
+        document.addEventListener('click', (e) => {
+            // Create burst of sparkles on click
+            for (let i = 0; i < 10; i++) {
+                createSparkle(e.clientX, e.clientY);
+            }
+            
+            // Pulse effect on cursor
+            cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+            setTimeout(() => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+            }, 200);
+        });
+        // Message database
+        const eidDecorations = ["🌙", "⭐", "🕌", "☪️", "🌠", "✨", "🌸", "🕋"];
+        const messages = {
+            generic: ["Eid Mubarak to you and your loved ones! May this special day bring your family closer together, strengthen your bonds, and fill your home with laughter, love, and the sweetest moments."],
+            members: [
+                "May the divine blessings of Allah bring you hope, faith, and joy on this Eid al-Fitr. We are glad to celebrate this holy festival with you!",
+                "Wishing you and your family a blessed Eid filled with happiness and peace. Good luck for this year and thank you for being a part of this creative department.",
+                "May this special day bring peace, happiness and prosperity to you just the way you have poured in creativity, hardwork and genuine love for us!",
+                "This Eid marks not just the end of Ramadan but a new beginning. Wishing you a blessed and meaningful celebration.",
+                "Eid Mubarak! As we celebrate this joyous occasion, let us be grateful for all our blessings - our health, family, and faith.",
+                "Eid Mubarak! May this sacred occasion remind us of our shared humanity and the importance of compassion. Let's extend kindness beyond our circles, help those in need, and work towards making our world more just and merciful for all."
+            ],
+            sumaiya: [
+                "may this Eid bring you endless happiness and joy! We are so fortunate to have you as one of our most respected senior. We wish to make you proud and do justice to your legacy!",
+                "wishing you an Eid as wonderful as you are! You have time and time again proven to be such an incredible human being, be it as a director or while working as our general secretary. We likewise only wish incredible things to come to you!"
+            ],
+            iffat: [
+                "wishing you an Eid as amazing as you are! You have time and time again proven to be such an incredible human being, be it as an assistant director or while working as our general secretary. We likewise only wish incredible things to come to you!",
+                "we are very fortunate that th IT department has you as one of our esteemed seniors. Wishing you a very very happy and healthy Eid apu."
+            ],
+            mayamee: [
+                "we wish you a very very happy Eid! May this Eid be as incredible as you have been as your respected Assistant Director!"
+            ],
+
+            akil: [
+                "wishing you an Eid as amazing as you are! May this Eid brings forth happiness and health in abundance for you and your family. We hope you continue to shine as bright as the moon of this holy month bhaia."
+            ],
+
+            istinub: [
+                "wishing you an Eid as amazing as you are! As our founding Director, you have not only created the blueprint that marks all the achievements of our department but you also carved out the path that led us to such a profound height. May Allah reward your mentorship with boundless happiness!"
+            ],
+
+            prothom: [
+                "from DJ Prothom to Director Prothom, may this Eid be as colourful as your personality, as healthy as your laughter and as happy as your memes. Eid Mubarak! Your legacy lives on in every content we craft bhaia."
+            ]
+        };
+
+        // Background images
+        const backgrounds = [
+            "/img/cover1.png",
+            "/img/cover2.png"
+        ];
+
+        // DOM elements
+        const card = document.getElementById('eidCard');
+        const cardBack = document.getElementById('cardBack');
+        const cardMessage = document.getElementById('cardMessage');
+        const cardSignature = document.getElementById('cardSignature');
+        const userNameInput = document.getElementById('userName');
+        const generateBtn = document.getElementById('generateBtn');
+
+        // Generate new card
+        function generateCard() {
+            let name = userNameInput.value.trim();
+            
+            let messagePool;
+            
+            // Select random background
+            const bgImage = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+            cover.style.backgroundImage = `url(${bgImage})`;
+            if (name.length > 0) {
+                if (messages[name]) {
+                    messagePool = messages[name];
+                } else {
+                    messagePool = messages.members;
+                }
+                name = name[0].toUpperCase() + name.slice(1).toLowerCase();
+            }else {
+                messagePool = messages.generic;
+            }
+
+            let message = messagePool[Math.floor(Math.random() * messagePool.length)];
+            // Select appropriate message
+            if (name.toLowerCase() === 'sumaiya' || name.toLowerCase() === 'sumaia' || name.toLowerCase() === 'iffat' || name.toLowerCase() === 'rifah' || name.toLowerCase() === 'mayamee' || name.toLowerCase() === 'samanta') {
+                message = `To dear ${name} Apu,\n${message}`;
+
+            } else if (name.toLowerCase() === 'akil' || name.toLowerCase() === 'tuhin' || name.toLowerCase() === 'prothom' || name.toLowerCase() === 'zohayer' || name.toLowerCase() === 'saad' || name.toLowerCase() === 'raad' || name.toLowerCase() === 'shoumik' || name.toLowerCase() === 'ahib' || name.toLowerCase() === 'istinub'){
+                message = `To dear ${name} Bhaia,\n${message}`;
+
+            } else if (name) {
+                // const genericMsg = messages.members[Math.floor(Math.random() * messages.generic.length)];
+                message = `Dear ${name}, ${message}`;
+            } else {
+                message = messages.generic[Math.floor(Math.random() * messages.generic.length)];
+            }
+            
+            const randomDecorations = [...eidDecorations].sort(() => 0.5 - Math.random()).slice(0, 2);
+            // Update card content
+            cardMessage.textContent = message;
+            cardSignature.textContent = "\n\n\n\nLove, IT Department⭐";
+            
+            const decorations = document.querySelectorAll('.decoration');
+            decorations.forEach((dec, index) => {
+                dec.textContent = randomDecorations[index] || '✨';
+            });
+            
+            
+
+            if (name.trim()) {
+                createConfetti();
+            }
+        }
+
+        // Event listeners
+        generateBtn.addEventListener('click', generateCard);
+        // newCardBtn.addEventListener('click', generateCard);
+        // document.getElementById('downloadBtn').addEventListener('click', async () => {
+        // try {
+        //     // Temporarily force card open for capture
+        //     const card = document.getElementById('eidCard');
+        //     card.classList.add('force-open');
+            
+        //     // Capture both cover and card back
+        //     const container = document.querySelector('.card-container');
+            
+        //     // Use html2canvas to capture the entire card container
+        //     const canvas = await html2canvas(container, {
+        //         useCORS: true, // Allow cross-origin images
+        //         scale: 2, // Higher quality
+        //         logging: true // Optional: helps debug
+        //     });
+
+        //     // Convert to JPEG and download
+        //     const link = document.createElement('a');
+        //     link.download = 'eid-card.jpg';
+        //     link.href = canvas.toDataURL('image/jpeg', 0.9);
+        //     link.click();
+
+        //     // Remove temporary class
+        //     card.classList.remove('force-open');
+        // } catch (error) {
+        //     console.error('Error generating image:', error);
+        // }
+        // });
+
+
+        document.getElementById('downloadBtn').addEventListener('click', async () => {
+        try {
+            const card = document.getElementById('eidCard');
+            card.classList.add('force-open');
+            
+            // Load template image
+            const templateImg = new Image();
+            templateImg.crossOrigin = "Anonymous";
+            templateImg.src = '/img/card-canvas.png';
+            
+            await new Promise((resolve) => {
+                templateImg.onload = resolve;
+            });
+
+            // Create canvas with template dimensions
+            const canvas = document.createElement('canvas');
+            canvas.width = templateImg.width;
+            canvas.height = templateImg.height;
+            const ctx = canvas.getContext('2d');
+            
+            // Draw template first
+            ctx.drawImage(templateImg, 0, 0);
+            
+            // Draw user content on top
+            const cardCanvas = await html2canvas(document.querySelector('.card-content'), {
+                scale: 2.6,
+                backgroundColor: null,
+                logging: true
+            });
+            const templateWidth = templateImg.width;  
+            const templateHeight = templateImg.height; 
+
+
+            const width = cardCanvas.width;  
+            const height = cardCanvas.height;
+            const xPosition = (templateWidth - width) / 2;
+            const yPosition = (templateHeight - height) / 1.3;
+            
+            ctx.drawImage(cardCanvas, xPosition, yPosition, width, height);
+
+            const link = document.createElement('a');
+            link.download = 'eid-card.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+
+            card.classList.remove('force-open');
+        } catch (error) {
+            console.error('Error generating image:', error);
+        }
+    });
+        // Initialize first card
+        generateCard();
+
+        function createConfetti() {
+            const colors = ['#f8b400', '#2c786c', '#004445', '#ff6b6b', '#4ecdc4'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
